@@ -2,3 +2,4 @@
 -adn-bos01
 \C$\ProgramData\WinCore\Log\Namos\Traces\EOD day1.log
 \\
+50
