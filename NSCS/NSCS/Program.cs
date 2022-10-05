@@ -10,48 +10,55 @@ internal class Program
         string firstLine = ConfigLines[0].ToString(); 
         string machinePath = ConfigLines[1].ToString(); 
         string filePath = ConfigLines[2].ToString(); 
+        string exts = ConfigLines[3].ToString(); 
        
         string[] Stationslines = System.IO.File.ReadAllLines(@"stationsIDs.txt");
         string stationPath = "";
         foreach(string Stationline in Stationslines)
         {
-            stationPath = @"\\" + Stationline + "-" + machinePath + filePath;
-            Console.WriteLine(stationPath);
+            string sationID = string.Join("", Stationline.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
+            stationPath = @"" +exts + sationID  + machinePath + filePath;
+            Console.WriteLine("Station Path: " + stationPath);
             try
             {
-                CheckOnLogFile(stationPath, firstLine);
-                //CheckOnLogFile(@"C:\\DayEnd.1.log", firstLine);
-                Thread.Sleep(150);
+                //CheckOnLogFile(@"C:\\DayEnd.1.log", firstLine, Stationline);
+                CheckOnLogFile(stationPath, firstLine, Stationline);
+                Console.WriteLine(Stationline + " ---> done");
+                Thread.Sleep(500);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message.ToString());
             }
-           
         }
-       
+        Console.ReadKey();
     }
 
-    public static void CheckOnLogFile(string path,string searchText)
+    public static void CheckOnLogFile(string path, string searchText,string stationID)
     {
         int lineNumber = 0;
         using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
         using (BufferedStream bs = new BufferedStream(fs))
         using (StreamReader sr = new StreamReader(bs))
         {
-            string line="";
-            string detectedDate="";
+            string line = "";
+            string detectedDate = "";
             while ((line = sr.ReadLine()) != null)
             {
                 lineNumber++;
                 bool isOK = Regex.IsMatch(line, @"[0-9][0-9]\.[0-9][0-9]\s[0-9][0-9]:[0-9][0-9]:[0-9][0-9]");
-                if(isOK)
+                if (isOK)
                 {
-                    detectedDate=line;
+                    Regex regex = new Regex(@"[0-9][0-9]\.[0-9][0-9]\s[0-9][0-9]:[0-9][0-9]:[0-9][0-9]");
+                    Match match = regex.Match(line);
+                    detectedDate = match.ToString();
                 }
                 if (line.Contains(searchText))
                 {
-                    Console.WriteLine(lineNumber + " : " + detectedDate + ": " + line);
+                    using (StreamWriter w = File.AppendText("Resultlog.txt"))
+                    {
+                        wirteLog(detectedDate, stationID, w);
+                    }
                 }
             }
         }
