@@ -18,17 +18,21 @@ internal class Program
         {
             string sationID = string.Join("", Stationline.Split(default(string[]), StringSplitOptions.RemoveEmptyEntries));
             stationPath = @"" +exts + sationID  + machinePath + filePath;
-            Console.WriteLine("Station Path: " + stationPath);
             try
             {
-                //CheckOnLogFile(@"C:\\DayEnd.1.log", firstLine, Stationline);
-                CheckOnLogFile(stationPath, firstLine, Stationline);
+                //CheckOnLogFile(@"C:\\DayEnd.1.log", firstLine, Stationline); \\ this for test
+                CheckOnLogFile(stationPath, firstLine, sationID);
                 Console.WriteLine(Stationline + " ---> done");
                 Thread.Sleep(500);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message.ToString());
+                using (StreamWriter w = File.AppendText("ErrorLog.txt"))
+                {
+                    wirteLog(sationID + "|", ex.Message, w);
+                }
+
             }
         }
         Console.ReadKey();
