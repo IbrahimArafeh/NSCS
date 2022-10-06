@@ -5,8 +5,6 @@ using System.Text.RegularExpressions;
 
 internal class Program
 {
-    public static List<string> finalList { get; set; }
-
     private static void Main(string[] args)
     {
         string[] ConfigLines = System.IO.File.ReadAllLines(@"config.txt");
@@ -14,7 +12,6 @@ internal class Program
         string machinePath = ConfigLines[1].ToString(); 
         string filePath = ConfigLines[2].ToString(); 
         string exts = ConfigLines[3].ToString();
-        int timer = Convert.ToInt32(ConfigLines[4]);
        
         string[] Stationslines = System.IO.File.ReadAllLines(@"stationsIDs.txt");
         string stationPath = "";
@@ -25,11 +22,11 @@ internal class Program
             try
             {
                 // this for test
-                var t = Task.Run(() => CheckOnLogFile(@"C:\\DayEnd.1.log", firstLine, Stationline));
-                t.Wait(timer);
+                //var t = Task.Run(() => CheckOnLogFile(@"C:\\DayEnd.1.log", firstLine, Stationline));
+                //t.Wait();
 
-                //var t = Task.Run(() => CheckOnLogFile(stationPath, firstLine, sationID));
-                //t.Wait(timer);
+                var t = Task.Run(() => CheckOnLogFile(stationPath, firstLine, sationID));
+                t.Wait();
 
 
                 using (StreamWriter w = File.AppendText("SuccessLog.txt"))
@@ -43,7 +40,7 @@ internal class Program
                 Console.WriteLine(ex.Message.ToString());
                 using (StreamWriter w = File.AppendText("ErrorLog.txt"))
                 {
-                    wirteLog(sationID + " --> ", ex.Message, w);
+                    wirteLog(sationID , ex.Message, w);
                 }
 
             }
@@ -62,9 +59,9 @@ internal class Program
             using (StreamReader sr = new StreamReader(bs))
             {
                 string detectedDate = "";
-                string line = await sr.ReadLineAsync();
+                string line = "";
 
-                while (line != null)
+                while ((line = sr.ReadLine()) != null)
                 {
                     lineNumber++;
                     bool isOK = Regex.IsMatch(line, @"[0-9][0-9]\.[0-9][0-9]\s[0-9][0-9]:[0-9][0-9]:[0-9][0-9]");
@@ -76,12 +73,12 @@ internal class Program
                     }
                     if (line.Contains(searchText))
                     {
-                        finalList.Add(detectedDate + "|" + stationID);
-                        //using (StreamWriter w = File.AppendText("Resultlog.txt"))
-                        //{
-                        //    wirteLog(detectedDate, stationID, w);
-                        //}
+                        using (StreamWriter w = File.AppendText("Resultlog.txt"))
+                        {
+                            wirteLog(detectedDate, stationID, w);
+                        }
                     }
+                    
                 }
             }
         }
@@ -90,7 +87,7 @@ internal class Program
             Console.WriteLine(ex.Message.ToString());
             using (StreamWriter w = File.AppendText("ErrorLog.txt"))
             {
-                wirteLog(stationID + "|", ex.Message, w);
+                wirteLog(stationID , ex.Message, w);
             }
         }
       
