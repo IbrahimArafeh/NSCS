@@ -124,8 +124,8 @@ internal class Program
 
 
 
-                    //var t = Task.Run(() => CheckOnLogFile(stationEODPath, firstLine, sationID, serviceType, ""));
-                    //t.Wait();
+                    var t = Task.Run(() => CheckOnLogFile(stationEODPath, firstLine, sationID, serviceType, ""));
+                    t.Wait();
 
                     //var tGetRam = Task.Run(() => getRamUsage(machinePath, sationID));
                     //tGetRam.Wait();
