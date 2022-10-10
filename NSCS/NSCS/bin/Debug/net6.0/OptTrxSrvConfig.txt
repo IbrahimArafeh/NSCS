@@ -1,8 +1,0 @@
-OptTrxSvr BI_IPC 9031 0 "OptTrxSvr.log" START=3 SHUTDOWN
--adn-bos01
-\C$\ProgramData\WinCore\Log\Namos\Traces\EOD day1.log
-\\
-2
-\C$\Program Files (x86)\Wincor Nixdorf\NAMOS\Param\SY_PROCS.txt
--adn-pos01
-\C$\Program Files (x86)\Wincor Nixdorf\NAMOS\Param\SY_PROCS.txt
