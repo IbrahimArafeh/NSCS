@@ -1,3 +1,4 @@
+using System.Net.NetworkInformation;
 using System.Reflection.PortableExecutable;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
@@ -7,9 +8,9 @@ namespace NSCS.WinApp
 {
     public partial class Form1 : Form
     {
-        public static List<string> resultListSearchFile { get; set; }
-        public static List<string> resultListErrorFile { get; set; }
-        
+        public List<string> resultListSearchFile = new List<string>();
+        public List<string> resultListErrorFile = new List<string>();
+
         public Form1()
         {
             InitializeComponent();
@@ -18,8 +19,8 @@ namespace NSCS.WinApp
 
         public void fillDataInFields()
         {
-            Properties.Settings.Default.filePath = txtFilePath.Text ;
-            Properties.Settings.Default.searchText = txtSearch.Text ;
+            txtFilePath.Text = Properties.Settings.Default.filePath;
+            txtSearch.Text = Properties.Settings.Default.searchText;
             //if(resultListSearchFile.Count() > 0)
             //    resultListSearchFile.Clear();
             //resultListErrorFile.Clear();
@@ -32,9 +33,10 @@ namespace NSCS.WinApp
             Properties.Settings.Default.searchText = txtSearch.Text;
             Properties.Settings.Default.Save();
         }
-        private void btnRun_Click(object sender, EventArgs e)
+        private async void btnRun_Click(object sender, EventArgs e)
         {
             fillSettingsItem();
+
             if (checkFillFields())
             {
                 List<int> AllStationsNumber = allSites();
@@ -49,16 +51,38 @@ namespace NSCS.WinApp
 
                 if (SelectedMahine == "BOTH")
                 {
-                    foreach(int StaitonNo in AllStationsNumber)
-                    {
-                        var t = Task.Run(() => SearchInFile(txtSearch.Text,@"\\"+ StaitonNo + @"-ADN-BOS01\" +txtFilePath, serviceType, StaitonNo));
-                        t.Wait();
-                    }
+                    
                 }
-                else
+                if(SelectedMahine == "-ADN-POS01")
                 {
 
                 }
+                if(SelectedMahine == "-ADN-BOS01")
+                {
+
+                    foreach (int StaitonNo in AllStationsNumber)
+                    {
+
+                        // for test
+                        //var t = Task.Run(() => SearchInFile(txtSearch.Text, txtFilePath.Text, serviceType, StaitonNo));
+                        //t.Wait();
+                        
+
+                        Task<int> task = new Task<int>(() => SearchInFile(txtSearch.Text, txtFilePath.Text, serviceType, StaitonNo));
+                        task.Start();
+                        lblProgress.Text = "Progressing File. Please Wait ...";
+                        int count = await task;
+                        lbResult.Items.Add(StaitonNo + "  -----------------> Done");
+                        lbResult.TopIndex = lbResult.Items.Count - 1;
+
+                        //Task<int> stTask = new Task<int>(() => SearchInFile(txtSearch.Text, @"\\" + StaitonNo + @"-ADN-BOS01\" + txtFilePath.Text, serviceType, StaitonNo));
+                        //stTask.Start();
+                        //lblProgress.Text = "Progressing File. Please Wait ...";
+                        //int count2 = await stTask;
+                    }
+                    MessageBox.Show("Scan File in all station is Done ","Done Task",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                }
+                lblProgress.Text = "Done";
             }
             else
                 MessageBox.Show("Please Fill All data", "Missing Filling", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -76,9 +100,9 @@ namespace NSCS.WinApp
             string selectedMachine = "";
             if (chkBosMachine.Checked == true && chkPosMachine.Checked == true)
                 selectedMachine= "BOTH";
-            if (chkPosMachine.Checked == true)
+            if (chkPosMachine.Checked == true && chkBosMachine.Checked == false)
                 selectedMachine = "-ADN-POS01";
-            if(chkBosMachine.Checked==true)
+            if(chkBosMachine.Checked==true && chkPosMachine.Checked == false)
                 selectedMachine = "-ADN-BOS01";
 
             return selectedMachine;
@@ -90,7 +114,8 @@ namespace NSCS.WinApp
             List<int> allSitesInt = new List<int>();
             try
             {
-                allSites = Properties.Settings.Default.AllSites.Cast<string>().ToList();
+                allSites = Properties.Settings.Default.AllSites.Cast<string>().Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList();
+                //allSites = Properties.Settings.Default.AllSites.Cast<string>().ToList();
                 foreach (string site in allSites)
                 {
                     int siteTrimed = Convert.ToInt32(site.Trim());
@@ -105,12 +130,14 @@ namespace NSCS.WinApp
             return allSitesInt;
         }
 
-        public void SearchInFile(string SearchText,string path,int serviceType,int stationNo)
+        public int SearchInFile(string SearchText,string path,int serviceType,int stationNo)
         {
             int lineNumber = 0;
+            int res = 0;
             try
             {
-                lblProgress.Text = "Please Wait ...";
+                Thread.Sleep(50);
+                //lblProgress.Text = "Please Wait ...";
                 using (FileStream fs = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 using (BufferedStream bs = new BufferedStream(fs))
                 using (StreamReader sr = new StreamReader(bs))
@@ -124,7 +151,10 @@ namespace NSCS.WinApp
                             if (line.Contains(SearchText))
                             {
                                 resultListSearchFile.Add(stationNo +"|"+ line);
-                                lbResult.Items.Add(stationNo + " ------------->  Done");
+                                using (StreamWriter w = File.AppendText("Result.txt"))
+                                {
+                                    wirteLog(stationNo + "|" + line, w);
+                                }
                             }
                         }
                     }
@@ -146,20 +176,30 @@ namespace NSCS.WinApp
                             }
                             if (line.Contains(SearchText))
                             {
-                                resultListSearchFile.Add(stationNo+"|"+detectedDate);
-                                lbResult.Items.Add(stationNo + " ------------->  Done");
+                                resultListSearchFile.Add(stationNo + "|" + detectedDate);
+                                using (StreamWriter w = File.AppendText("result.txt"))
+                                {
+                                    wirteLog(stationNo + "|" + detectedDate, w);
+                                }
                             }
                         }
                     }
                     
                 }
+                res = 1;
             }
             catch (Exception ex)
             {
                 resultListErrorFile.Add(stationNo + " --> " + ex.Message);
-                lbResult.Items.Add(stationNo + " ------------->  Error");
-
+                //lbResult.Items.Add(stationNo + " ------------->  Error");
+                using (StreamWriter w = File.AppendText("ErrorLog.txt"))
+                {
+                    wirteLog(stationNo +" --> "+ ex.Message, w);
+                }
+                res = 0;
             }
+
+            return res;
 
         }
 
@@ -171,6 +211,11 @@ namespace NSCS.WinApp
         private void lbResult_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        public static void wirteLog(string textToWrite, TextWriter w)
+        {
+            w.WriteLine(textToWrite);
         }
     }
 }

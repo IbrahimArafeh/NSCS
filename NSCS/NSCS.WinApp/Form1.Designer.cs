@@ -106,9 +106,6 @@
             // 
             this.lbResult.FormattingEnabled = true;
             this.lbResult.ItemHeight = 15;
-            this.lbResult.Items.AddRange(new object[] {
-            "ibrahim",
-            "arafeh"});
             this.lbResult.Location = new System.Drawing.Point(153, 342);
             this.lbResult.Name = "lbResult";
             this.lbResult.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
@@ -130,7 +127,7 @@
             // 
             this.lblProgress.AutoSize = true;
             this.lblProgress.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblProgress.Location = new System.Drawing.Point(348, 298);
+            this.lblProgress.Location = new System.Drawing.Point(295, 301);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.Size = new System.Drawing.Size(64, 20);
             this.lblProgress.TabIndex = 9;
