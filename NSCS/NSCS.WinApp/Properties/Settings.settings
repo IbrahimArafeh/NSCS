@@ -510,5 +510,8 @@
   &lt;string&gt;997             &lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
+    <Setting Name="FileNameLike" Type="System.String" Scope="User">
+      <Value Profile="(Default)">namosnt.*.log</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

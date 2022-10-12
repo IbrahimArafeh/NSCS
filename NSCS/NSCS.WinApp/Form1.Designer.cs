@@ -38,6 +38,12 @@
             this.lbResult = new System.Windows.Forms.ListBox();
             this.chkGetDateInFile = new System.Windows.Forms.CheckBox();
             this.lblProgress = new System.Windows.Forms.Label();
+            this.pb = new System.Windows.Forms.ProgressBar();
+            this.chkAnyFileLike = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtFileNameLike = new System.Windows.Forms.TextBox();
+            this.rtbStationID = new System.Windows.Forms.RichTextBox();
+            this.btnUpdateSts = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtSearch
@@ -59,7 +65,7 @@
             // chkBosMachine
             // 
             this.chkBosMachine.AutoSize = true;
-            this.chkBosMachine.Location = new System.Drawing.Point(153, 129);
+            this.chkBosMachine.Location = new System.Drawing.Point(153, 199);
             this.chkBosMachine.Name = "chkBosMachine";
             this.chkBosMachine.Size = new System.Drawing.Size(97, 19);
             this.chkBosMachine.TabIndex = 2;
@@ -85,7 +91,7 @@
             // chkPosMachine
             // 
             this.chkPosMachine.AutoSize = true;
-            this.chkPosMachine.Location = new System.Drawing.Point(295, 129);
+            this.chkPosMachine.Location = new System.Drawing.Point(295, 199);
             this.chkPosMachine.Name = "chkPosMachine";
             this.chkPosMachine.Size = new System.Drawing.Size(97, 19);
             this.chkPosMachine.TabIndex = 5;
@@ -94,7 +100,7 @@
             // 
             // btnRun
             // 
-            this.btnRun.Location = new System.Drawing.Point(295, 235);
+            this.btnRun.Location = new System.Drawing.Point(295, 275);
             this.btnRun.Name = "btnRun";
             this.btnRun.Size = new System.Drawing.Size(185, 39);
             this.btnRun.TabIndex = 6;
@@ -106,7 +112,7 @@
             // 
             this.lbResult.FormattingEnabled = true;
             this.lbResult.ItemHeight = 15;
-            this.lbResult.Location = new System.Drawing.Point(153, 342);
+            this.lbResult.Location = new System.Drawing.Point(153, 412);
             this.lbResult.Name = "lbResult";
             this.lbResult.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.lbResult.Size = new System.Drawing.Size(491, 199);
@@ -116,7 +122,7 @@
             // chkGetDateInFile
             // 
             this.chkGetDateInFile.AutoSize = true;
-            this.chkGetDateInFile.Location = new System.Drawing.Point(153, 167);
+            this.chkGetDateInFile.Location = new System.Drawing.Point(153, 237);
             this.chkGetDateInFile.Name = "chkGetDateInFile";
             this.chkGetDateInFile.Size = new System.Drawing.Size(71, 19);
             this.chkGetDateInFile.TabIndex = 8;
@@ -127,17 +133,77 @@
             // 
             this.lblProgress.AutoSize = true;
             this.lblProgress.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblProgress.Location = new System.Drawing.Point(295, 301);
+            this.lblProgress.Location = new System.Drawing.Point(320, 330);
             this.lblProgress.Name = "lblProgress";
             this.lblProgress.Size = new System.Drawing.Size(64, 20);
             this.lblProgress.TabIndex = 9;
             this.lblProgress.Text = "File Path";
+            this.lblProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pb
+            // 
+            this.pb.ForeColor = System.Drawing.Color.LimeGreen;
+            this.pb.Location = new System.Drawing.Point(153, 370);
+            this.pb.Name = "pb";
+            this.pb.Size = new System.Drawing.Size(483, 23);
+            this.pb.Step = 1;
+            this.pb.TabIndex = 10;
+            // 
+            // chkAnyFileLike
+            // 
+            this.chkAnyFileLike.AutoSize = true;
+            this.chkAnyFileLike.Location = new System.Drawing.Point(295, 237);
+            this.chkAnyFileLike.Name = "chkAnyFileLike";
+            this.chkAnyFileLike.Size = new System.Drawing.Size(92, 19);
+            this.chkAnyFileLike.TabIndex = 11;
+            this.chkAnyFileLike.Text = "Any File Like";
+            this.chkAnyFileLike.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(50, 123);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(84, 15);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "File Name Like";
+            // 
+            // txtFileNameLike
+            // 
+            this.txtFileNameLike.Location = new System.Drawing.Point(153, 120);
+            this.txtFileNameLike.Name = "txtFileNameLike";
+            this.txtFileNameLike.Size = new System.Drawing.Size(483, 23);
+            this.txtFileNameLike.TabIndex = 12;
+            // 
+            // rtbStationID
+            // 
+            this.rtbStationID.Location = new System.Drawing.Point(684, 51);
+            this.rtbStationID.Name = "rtbStationID";
+            this.rtbStationID.Size = new System.Drawing.Size(152, 277);
+            this.rtbStationID.TabIndex = 14;
+            this.rtbStationID.Text = "";
+            // 
+            // btnUpdateSts
+            // 
+            this.btnUpdateSts.Location = new System.Drawing.Point(697, 334);
+            this.btnUpdateSts.Name = "btnUpdateSts";
+            this.btnUpdateSts.Size = new System.Drawing.Size(123, 39);
+            this.btnUpdateSts.TabIndex = 15;
+            this.btnUpdateSts.Text = "Update Stations";
+            this.btnUpdateSts.UseVisualStyleBackColor = true;
+            this.btnUpdateSts.Click += new System.EventHandler(this.btnUpdateSts_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 562);
+            this.ClientSize = new System.Drawing.Size(867, 651);
+            this.Controls.Add(this.btnUpdateSts);
+            this.Controls.Add(this.rtbStationID);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.txtFileNameLike);
+            this.Controls.Add(this.chkAnyFileLike);
+            this.Controls.Add(this.pb);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.chkGetDateInFile);
             this.Controls.Add(this.lbResult);
@@ -168,5 +234,11 @@
         public ListBox lbResult;
         private CheckBox chkGetDateInFile;
         private Label lblProgress;
+        private ProgressBar pb;
+        private CheckBox chkAnyFileLike;
+        private Label label3;
+        private TextBox txtFileNameLike;
+        private RichTextBox rtbStationID;
+        private Button btnUpdateSts;
     }
 }

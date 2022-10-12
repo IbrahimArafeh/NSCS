@@ -268,7 +268,7 @@ internal class Program
     {
         double RamValue = 0;
         string sqlConn = @"Data Source=" + comName + ";Initial Catalog=Master;Integrated Security=True";
-     
+
         try
         {
             using (var connection = new SqlConnection(sqlConn))
@@ -283,13 +283,13 @@ internal class Program
                     sql = "select physical_memory_kb/1024 from sys.dm_os_sys_info;";
                     cmd = new SqlCommand(sql, connection);
                     dataReader = cmd.ExecuteReader();
-                    while(dataReader.Read())
+                    while (dataReader.Read())
                     {
-                        var output= (int)(long)dataReader.GetInt64(0);
+                        var output = (int)(long)dataReader.GetInt64(0);
                         using (StreamWriter w = File.AppendText("Sql_CmdRam.txt"))
                         {
-                            Console.WriteLine(stationID + " --> " + " SqlRam" + ": "+ output);
-                            wirteLog(output.ToString(),stationID, w);
+                            Console.WriteLine(stationID + " --> " + " SqlRam" + ": " + output);
+                            wirteLog(output.ToString(), stationID, w);
                         }
                     }
                     connection.Close();
@@ -299,7 +299,7 @@ internal class Program
                     using (StreamWriter w = File.AppendText("log.txt"))
                     {
                         Console.WriteLine(ex.Message);
-                        wirteLog(stationID, ex.Message,w);
+                        wirteLog(stationID, ex.Message, w);
                         throw;
                     }
                 }
@@ -316,7 +316,7 @@ internal class Program
 
     }
 
-   
+
 
 
 

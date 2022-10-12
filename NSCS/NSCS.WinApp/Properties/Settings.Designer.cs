@@ -290,5 +290,17 @@ namespace NSCS.WinApp.Properties {
                 this["AllSites"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("namosnt.*.log")]
+        public string FileNameLike {
+            get {
+                return ((string)(this["FileNameLike"]));
+            }
+            set {
+                this["FileNameLike"] = value;
+            }
+        }
     }
 }
