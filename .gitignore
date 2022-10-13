@@ -1,5 +1,12 @@
 ﻿NSCS/.vs
+<<<<<<< HEAD
 NSCS/NSCS/obj/Debug
 NSCS/NSCS/obj
 NSCS/NSCS.WinApp/obj/Debug
 NSCS/NSCS.WinApp/obj
+=======
+NSCS/.vs/NSCS/v17
+NSCS/.vs/NSCS/DesignTimeBuild
+NSCS/NSCS.WinApp/bin/Debug
+NSCS/NSCS.WinApp/obj/Debug
+>>>>>>> Features/WinForm-SearchingType
