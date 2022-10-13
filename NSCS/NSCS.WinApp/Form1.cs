@@ -123,7 +123,6 @@ namespace NSCS.WinApp
                             }
                         }
 
-
                         pb.PerformStep();
                     }
                 }
@@ -133,16 +132,16 @@ namespace NSCS.WinApp
                     foreach (int StaitonNo in AllStationsNumber)
                     {
                         //Test
-                        if (serviceType == 3)
-                        {
-                            string fallDirectoryPath = txtFilePath.Text;
-                            ;
-                            Task<int> task = new Task<int>(() => SearchInFileLike(txtSearch.Text, fallDirectoryPath, 2, StaitonNo, "POS"));
-                            task.Start();
-                            lblProgress.Text = "Progressing File. Please Wait ...";
-                            int count = await task;
+                        //if (serviceType == 3)
+                        //{
+                        //    string fallDirectoryPath = txtFilePath.Text;
+                        //    ;
+                        //    Task<int> task = new Task<int>(() => SearchInFileLike(txtSearch.Text, fallDirectoryPath, 2, StaitonNo, "POS"));
+                        //    task.Start();
+                        //    lblProgress.Text = "Progressing File. Please Wait ...";
+                        //    int count = await task;
 
-                        }
+                        //}
 
                         //Release
                         if (serviceType == 3)
